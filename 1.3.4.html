@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Ccircle cx=%278%27 cy=%2712%27 r=%277.5%27 fill=%27%238fa0ff%27/%3E%3Ccircle cx=%2716%27 cy=%2712%27 r=%277.5%27 fill=%27%23ffb08f%27/%3E%3C/svg%3E">
 <title>Tela a dois — BETA 1.3.3</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'wasm-unsafe-eval' blob: https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js https://cdn.jsdelivr.net/npm/simple-rnnoise-wasm@1.1.0/dist/ https://unpkg.com/simple-rnnoise-wasm@1.1.0/dist/ 'sha256-x1I0u2lJeP44G84t2vudLEvtfphJ8BxjAReZeBRhg7E='; style-src 'sha256-4UrcFDZv70NrmKksMmESR0PUL4uh8uu8fsw160vE8tc='; connect-src https://0.peerjs.com wss://0.peerjs.com https://cdn.jsdelivr.net https://unpkg.com; worker-src https://cdn.jsdelivr.net https://unpkg.com blob:; media-src blob:; img-src data: blob:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'wasm-unsafe-eval' blob: https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js https://cdn.jsdelivr.net/npm/simple-rnnoise-wasm@1.1.0/dist/ https://unpkg.com/simple-rnnoise-wasm@1.1.0/dist/ 'sha256-E8Je6BikXj4iKAdNhbJiebNlajqzGnT2znzcTKlCKmE='; style-src 'sha256-Z4/mw+LCqDkhBjYF6dchkSphblVXD3cFWf+ZBTv6Jrk='; connect-src https://0.peerjs.com wss://0.peerjs.com https://cdn.jsdelivr.net https://unpkg.com; worker-src https://cdn.jsdelivr.net https://unpkg.com blob:; media-src blob:; img-src data: blob:; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <style>
 /*
@@ -5048,6 +5048,39 @@
     }
   }
 }
+
+  /* ===== Câmeras estilo Meet/Zoom/Discord ===== */
+  .camera-pips[data-layout="grid"] .camera-pip { transition: left .22s, top .22s, width .22s, height .22s }
+  .camera-pips:not([data-layout="float"]) .camera-pip-drag-handle,
+  .camera-pips:not([data-layout="float"]) .camera-pip-resize { display: none }
+  .camera-pip.is-hidden-tile { display: none }
+  .camera-pip.is-speaking { border-color: var(--me); box-shadow: 0 0 0 3px var(--me), 0 8px 24px var(--black-a30) }
+  .camera-pip.is-local video { transform: none }
+  .camera-pip.is-mirrored video { transform: scaleX(-1) }
+  .camera-pip.fit-contain video { object-fit: contain }
+  .camera-pip.is-avatar { background: var(--color-0d0a15) }
+  .cam-avatar { position: absolute; inset: 0; display: grid; place-items: center }
+  .cam-avatar b { width: clamp(44px, 38%, 110px); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; color: var(--white); font-size: clamp(20px, 3.2vw, 44px); font-weight: 650 }
+  .camera-pip.is-avatar [data-act="mirror"], .camera-pip.is-avatar [data-act="full"] { display: none }
+  .camera-pip-label.is-muted::after { content: " · mudo"; color: var(--danger) }
+  .cam-actions { position: absolute; top: 5px; right: 5px; z-index: 3; display: flex; gap: 4px; opacity: 0; transition: opacity .15s }
+  .camera-pip:hover .cam-actions, .camera-pip:focus-within .cam-actions, .camera-pip.show-actions .cam-actions { opacity: 1 }
+  .cam-actions button { width: 26px; height: 26px; display: grid; place-items: center; padding: 0; border: 1px solid var(--white-a22); border-radius: 7px; background: var(--bg-a72); color: var(--white); cursor: pointer; backdrop-filter: blur(6px) }
+  .cam-actions button[aria-pressed="true"] { color: var(--me); border-color: var(--me) }
+  .cam-actions svg { width: 15px; height: 15px; display: block }
+  .cam-bar { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 9; display: flex; gap: 6px; pointer-events: auto }
+  .cam-bar-btn { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-a72); color: var(--text); font-size: var(--text-11); cursor: pointer; backdrop-filter: blur(6px) }
+  .stage.has-cam-strip-r #video { width: auto; right: var(--cam-strip) }
+  .stage.has-cam-strip-b #video { height: auto; bottom: var(--cam-strip) }
+  .cam-preview-back { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 16px; background: rgba(8, 6, 14, .72) }
+  .cam-preview { width: min(460px, 100%); padding: 16px; display: grid; gap: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--text) }
+  .cam-preview h2 { margin: 0; font-size: 1.05rem }
+  .cam-preview video { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; background: #000 }
+  .cam-preview.mirror video { transform: scaleX(-1) }
+  .cam-preview select { width: 100% }
+  .cam-preview .hint { margin: 0 }
+  .cam-preview-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap }
+  @media (prefers-reduced-motion: reduce) { .camera-pips[data-layout="grid"] .camera-pip, .cam-actions { transition: none } }
 </style>
 </head>
 <body>
@@ -6238,6 +6271,7 @@
       audioMix:         { key: 'teladois:audio-mix',               fallback: null,  decode: decodeJsonObject,    encode: JSON.stringify },
       qualitySettings:  { key: 'teladois:q:v126',                  fallback: null,  decode: decodeJsonObject,    encode: JSON.stringify },
       cameraPipLayouts: { key: 'teladois:camera-pip-layouts:v1',   fallback: () => ({}), decode: decodeJsonObject, encode: JSON.stringify },
+      cameraLayoutMode: { key: 'teladois:camera-layout-mode:v1', fallback: 'auto', decode: raw => (raw === 'float' ? 'float' : 'auto'), encode: String },
       legacyChatVolume: { key: 'teladois:chat-notification-volume' } // legado: só removido na inicialização
     });
     function entryOf(name) {
@@ -7078,6 +7112,7 @@
         headset.title = av.outputMuted ? 'Áudio recebido silenciado por esta pessoa' : 'Áudio recebido ativo para esta pessoa';
       }
     }
+    syncCameraTileStatus();
   }
   function publishLocalAvState(force = false) {
     if (!state.nick) return;
@@ -8736,6 +8771,7 @@
     // vídeo / palco
     const showVideo = state.partnerSharing && state.videoPlaying;
     els.video.classList.toggle('is-hidden', !showVideo);
+    layoutCameraStage();
     els.badge.classList.toggle('hidden', !showVideo);
     els.btnFull.classList.toggle('hidden', !showVideo || (els.btnScreenZoomReset && !els.btnScreenZoomReset.classList.contains('hidden')));
     // O controle de áudio da tela está no slider translúcido central; oculta o botão legado do canto.
@@ -10542,10 +10578,12 @@
       els.screenVolumeControl.classList.remove('is-expanded');
       if (els.screenVolumeMute) els.screenVolumeMute.setAttribute('aria-expanded', 'false');
     }
+    syncCameraTileStatus();
   }
   function setTalkChip(who, talking) {
     const c = els.people.querySelector('.chip.' + (who === 'me' ? 'me' : 'them'));
     if (c) c.classList.toggle('talking', talking);
+    syncCameraTileStatus();
   }
 
   function clearRemoteVideo() {
@@ -13249,7 +13287,7 @@
     const rect = els.cameraPips ? els.cameraPips.getBoundingClientRect() : {width:0,height:0};
     return {width:Math.max(1,rect.width),height:Math.max(1,rect.height)};
   }
-  function clampCameraPipTile(tile) {
+  function clampCameraPipTileBase(tile) {
     const bounds = cameraPipBounds();
     const maxWidth = Math.max(88, Math.min(480, bounds.width * .82, bounds.height * .82 * 4 / 3));
     const minWidth = Math.min(92, maxWidth);
@@ -13372,11 +13410,13 @@
     const resize = document.createElement('button'); resize.type = 'button'; resize.className = 'camera-pip-resize'; resize.title = 'Arraste para redimensionar'; resize.setAttribute('aria-label','Redimensionar quadro da câmera; use as setas para ajustar o tamanho');
     resize.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5h4v4M19 5 10 14M13 14v5h6"/></svg>';
     const label = document.createElement('span'); label.className = 'camera-pip-label'; label.textContent = isLocal ? 'Você' : (clean(nick) || 'Participante');
-    tile.append(video, drag, resize, label);
+    tile.append(video, drag, resize, label, makeCameraActions()); tile.dataset.nick = String(nick || ''); if (isLocal) tile.classList.add('is-mirrored');
+    const fit = () => tile.classList.toggle('fit-contain', video.videoHeight > video.videoWidth * 1.05);
+    video.addEventListener('loadedmetadata', fit); video.addEventListener('resize', fit);
     return {tile, video};
   }
 
-  function renderCameraPip(cameraId, nick, stream, isLocal = false) {
+  function renderCameraPipBase(cameraId, nick, stream, isLocal = false) {
     if (!els.cameraPips || !stream) return;
     let tile = els.cameraPips.querySelector('[data-camera-id="' + String(cameraId).replace(/"/g, '') + '"]');
     if (!tile) {
@@ -13401,7 +13441,7 @@
     for (const tile of els.cameraPips.querySelectorAll('.camera-pip')) clampCameraPipTile(tile);
   }, {passive:true});
 
-  function removeCameraPip(cameraId) {
+  function removeCameraPipBase(cameraId) {
     if (!els.cameraPips) return;
     const id = String(cameraId || '');
     for (const tile of els.cameraPips.querySelectorAll('.camera-pip')) {
@@ -13413,6 +13453,216 @@
   }
   // Token monotônico para invalidar getUserMedia pendente ao cancelar, sair da sala
   // ou iniciar uma tentativa mais recente. getUserMedia não pode ser abortado diretamente.
+
+
+  /* ===== Palco de câmeras (grade, faixa, destaque, avatar, menu por quadro, qualidade, pré-visualização) ===== */
+  var camUi = {pinned:'', hidden:new Set(), mirror:new Map(), qt:0};
+  function camSvg(d) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>'; }
+  function camActions() { return [
+    ['pin','Fixar em destaque',camSvg('<path d="M12 17v5M9 3h6l-1 6 3 3v2H7v-2l3-3z"/>')],
+    ['mirror','Espelhar imagem',camSvg('<path d="M12 3v18M8 7 3 12l5 5zM16 7l5 5-5 5z"/>')],
+    ['full','Tela cheia',camSvg('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>')],
+    ['hide','Ocultar só para mim',camSvg('<path d="m3 3 18 18M10.6 6.2A9 9 0 0 1 22 12a14 14 0 0 1-3 3.8M6.5 6.6A14 14 0 0 0 2 12s3.5 7 10 7a9.6 9.6 0 0 0 3.4-.6"/>')]
+  ]; }
+  function makeCameraActions() {
+    const box = document.createElement('div'); box.className = 'cam-actions';
+    for (const [act, title, icon] of camActions()) {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.act = act; b.title = title; b.setAttribute('aria-label', title); b.innerHTML = icon; box.appendChild(b);
+    }
+    return box;
+  }
+  function clampCameraPipTile(tile) { if (els.cameraPips && els.cameraPips.dataset.layout === 'float') clampCameraPipTileBase(tile); }
+  function renderCameraPip(cameraId, nick, stream, isLocal = false) {
+    renderCameraPipBase(cameraId, nick, stream, isLocal);
+    const t = els.cameraPips && els.cameraPips.querySelector('[data-camera-id="' + String(cameraId).replace(/"/g, '') + '"]');
+    if (t) t.dataset.nick = String(nick || '');
+    layoutCameraStage(); scheduleCameraQuality();
+  }
+  function removeCameraPip(cameraId) { removeCameraPipBase(cameraId); layoutCameraStage(); scheduleCameraQuality(); }
+
+  function camPeople() {
+    const me = clean(state.nick) || 'Você';
+    const list = [{nick:me, local:true}];
+    const seen = new Set([me.toLocaleLowerCase('pt-BR')]);
+    const names = state.isHost ? [...state.members.values()].map(m => m.nick) : (state.roster || []);
+    for (const n of names) { const c = clean(n); const k = c.toLocaleLowerCase('pt-BR'); if (c && !seen.has(k)) { seen.add(k); list.push({nick:c, local:false}); } }
+    return list;
+  }
+  function createAvatarTile(nick, key) {
+    const tile = document.createElement('div'); tile.className = 'camera-pip is-avatar' + (key === 'local' ? ' is-local' : '');
+    tile.dataset.layoutKey = key; tile.dataset.nick = nick;
+    const wrap = document.createElement('div'); wrap.className = 'cam-avatar';
+    const dot = document.createElement('b'); dot.textContent = (Array.from(nick)[0] || '?').toLocaleUpperCase('pt-BR');
+    let h = 0; for (const ch of nick) h = (h * 31 + ch.charCodeAt(0)) % 360;
+    dot.style.background = 'hsl(' + h + ' 42% 38%)'; wrap.appendChild(dot);
+    const label = document.createElement('span'); label.className = 'camera-pip-label'; label.textContent = key === 'local' ? 'Você' : nick;
+    tile.append(wrap, label, makeCameraActions());
+    return tile;
+  }
+  function syncCameraTileStatus() {
+    const host = els.cameraPips; if (!host || !camUi) return;
+    for (const t of host.querySelectorAll('.camera-pip')) {
+      const key = t.dataset.layoutKey || ''; const local = key === 'local'; const nick = t.dataset.nick || '';
+      const talking = local ? !!state.meTalking : state.voiceTalking.has(nick.toLocaleLowerCase('pt-BR'));
+      const av = local ? {micMuted:!micIsActuallyOpen()} : (state.remoteAvStates.get(normAudioNick(nick)) || {});
+      t.classList.toggle('is-speaking', talking && !av.micMuted);
+      const label = t.querySelector('.camera-pip-label'); if (label) label.classList.toggle('is-muted', !!av.micMuted);
+      t.classList.toggle('is-mirrored', camUi.mirror.has(key) ? camUi.mirror.get(key) : t.classList.contains('is-local') && !t.classList.contains('is-avatar'));
+      t.classList.toggle('is-hidden-tile', camUi.hidden.has(key));
+      t.classList.toggle('is-pinned', camUi.pinned === key);
+      const pin = t.querySelector('[data-act="pin"]'); if (pin) pin.setAttribute('aria-pressed', String(camUi.pinned === key));
+    }
+  }
+  function cameraBar(host) {
+    let bar = host.querySelector('.cam-bar'); if (bar) return bar;
+    bar = document.createElement('div'); bar.className = 'cam-bar hidden';
+    for (const act of ['mode','show']) { const b = document.createElement('button'); b.type = 'button'; b.className = 'cam-bar-btn'; b.dataset.bar = act; bar.appendChild(b); }
+    host.appendChild(bar); return bar;
+  }
+  function layoutCameraStage() {
+    const host = els.cameraPips; if (!host || !camUi) return;
+    const mode = prefStore.get('cameraLayoutMode') === 'float' ? 'float' : 'auto';
+    host.dataset.layout = mode === 'float' ? 'float' : 'grid';
+    const stage = els.stage;
+    stage.classList.remove('has-cam-strip-r', 'has-cam-strip-b'); stage.style.removeProperty('--cam-strip');
+    const people = state.inRoom && !state.ended ? camPeople() : [];
+    const keyOf = p => cameraPipLayoutIdentity(p.nick, p.local);
+    const camTiles = [...host.querySelectorAll('.camera-pip:not(.is-avatar)')];
+    const useAvatars = mode !== 'float' && camTiles.length > 0;
+    const need = useAvatars ? people.filter(p => !camTiles.some(t => t.dataset.layoutKey === keyOf(p))) : [];
+    for (const t of host.querySelectorAll('.camera-pip.is-avatar')) if (!need.some(p => keyOf(p) === t.dataset.layoutKey)) t.remove();
+    for (const p of need) { const k = keyOf(p); if (!host.querySelector('.camera-pip.is-avatar[data-layout-key="' + CSS.escape(k) + '"]')) host.appendChild(createAvatarTile(p.nick, k)); }
+    const byKey = new Map([...host.querySelectorAll('.camera-pip')].map(t => [t.dataset.layoutKey, t]));
+    const tiles = people.map(p => byKey.get(keyOf(p))).filter(Boolean);
+    for (const t of byKey.values()) if (!tiles.includes(t)) tiles.push(t);
+    syncCameraTileStatus();
+    const hiddenN = tiles.filter(t => camUi.hidden.has(t.dataset.layoutKey)).length;
+    const bar = cameraBar(host); const btns = bar.querySelectorAll('button');
+    bar.classList.toggle('hidden', !tiles.length);
+    btns[0].textContent = mode === 'float' ? 'Layout: flutuante' : 'Layout: automático'; btns[0].title = 'Alternar entre grade automática e quadros flutuantes';
+    btns[1].textContent = 'Mostrar ocultas (' + hiddenN + ')'; btns[1].classList.toggle('hidden', !hiddenN);
+    if (mode === 'float') {
+      tiles.forEach((t, i) => { if (t.dataset.floatApplied !== '1' && !t.classList.contains('is-avatar')) { t.style.height = ''; applyCameraPipLayout(t, t.dataset.nick, t.classList.contains('is-local'), i); t.dataset.floatApplied = '1'; } });
+      return;
+    }
+    tiles.forEach(t => { t.dataset.floatApplied = ''; });
+    const vis = tiles.filter(t => !camUi.hidden.has(t.dataset.layoutKey));
+    const rect = host.getBoundingClientRect(); const W = rect.width, H = rect.height;
+    if (!vis.length || W < 50 || H < 50) return;
+    const gap = 8, screenOn = !els.video.classList.contains('is-hidden');
+    const place = (t, x, y, w, h) => { const st = t.style; st.left = x + 'px'; st.top = y + 'px'; st.width = w + 'px'; st.height = h + 'px'; };
+    const grid = (items, ax, ay, aw, ah) => {
+      const n = items.length; let best = null;
+      for (let c = 1; c <= n; c++) { const r = Math.ceil(n / c); const w = Math.min((aw - gap * (c - 1)) / c, ((ah - gap * (r - 1)) / r) * 16 / 9); if (!best || w > best.w) best = {c, r, w}; }
+      const w = best.w, h = w * 9 / 16;
+      items.forEach((t, i) => {
+        const row = Math.floor(i / best.c), col = i - row * best.c, inRow = row === best.r - 1 ? n - row * best.c : best.c;
+        place(t, ax + (aw - (inRow * w + (inRow - 1) * gap)) / 2 + col * (w + gap), ay + (ah - (best.r * h + (best.r - 1) * gap)) / 2 + row * (h + gap), w, h);
+      });
+    };
+    const pinned = vis.find(t => t.dataset.layoutKey === camUi.pinned);
+    if (!screenOn && !(pinned && vis.length > 1)) { grid(vis, gap, gap, W - gap * 2, H - gap * 2); return; }
+    const main = screenOn ? null : pinned;
+    const rest = main ? vis.filter(t => t !== main) : (pinned ? [pinned, ...vis.filter(t => t !== pinned)] : vis);
+    const m = rest.length;
+    if (W >= H * 1.05 && W > 560) {
+      const th = Math.min(Math.max(150, Math.min(240, W * .2)) * 9 / 16, (H - gap * (m + 1)) / m), tw = th * 16 / 9;
+      const y0 = (H - (m * th + (m - 1) * gap)) / 2;
+      rest.forEach((t, i) => place(t, W - tw - gap, y0 + i * (th + gap), tw, th));
+      if (screenOn) { stage.classList.add('has-cam-strip-r'); stage.style.setProperty('--cam-strip', (tw + gap * 2) + 'px'); }
+      if (main) grid([main], gap, gap, W - tw - gap * 3, H - gap * 2);
+    } else {
+      const tw = Math.min(Math.max(90, Math.min(140, H * .22)) * 16 / 9, (W - gap * (m + 1)) / m), th = tw * 9 / 16;
+      const x0 = (W - (m * tw + (m - 1) * gap)) / 2;
+      rest.forEach((t, i) => place(t, x0 + i * (tw + gap), H - th - gap, tw, th));
+      if (screenOn) { stage.classList.add('has-cam-strip-b'); stage.style.setProperty('--cam-strip', (th + gap * 2) + 'px'); }
+      if (main) grid([main], gap, gap, W - gap * 2, H - th - gap * 3);
+    }
+  }
+  function adaptCameraQuality() {
+    const total = els.cameraPips ? els.cameraPips.querySelectorAll('.camera-pip:not(.is-avatar)').length : 0;
+    const scale = camUi.pinned || total <= 2 ? 1 : total <= 4 ? 2 : 3;
+    const bitrate = scale === 1 ? 1200000 : scale === 2 ? 500000 : 220000;
+    const track = state.cameraStream && state.cameraStream.getVideoTracks()[0];
+    if (track && track.applyConstraints) track.applyConstraints({frameRate:{ideal: scale === 3 ? 15 : 24, max:30}}).catch(() => {});
+    for (const e of state.cameraOutCalls.values()) {
+      const pc = e.call && e.call.peerConnection; if (!pc) continue;
+      for (const sender of pc.getSenders()) {
+        if (!sender.track || sender.track.kind !== 'video') continue;
+        try {
+          const p = sender.getParameters(); if (!p.encodings || !p.encodings.length) p.encodings = [{}];
+          p.encodings[0].maxBitrate = bitrate; p.encodings[0].scaleResolutionDownBy = scale;
+          sender.setParameters(p).catch(() => {});
+        } catch (_) { /* melhor esforço */ }
+      }
+    }
+  }
+  function scheduleCameraQuality() { clearTimeout(camUi.qt); camUi.qt = setTimeout(adaptCameraQuality, 700); setTimeout(adaptCameraQuality, 3000); }
+
+  if (els.cameraPips) {
+    els.cameraPips.addEventListener('click', e => {
+      const bar = e.target.closest('[data-bar]');
+      if (bar) {
+        if (bar.dataset.bar === 'mode') prefStore.set('cameraLayoutMode', prefStore.get('cameraLayoutMode') === 'float' ? 'auto' : 'float');
+        else camUi.hidden.clear();
+        layoutCameraStage(); return;
+      }
+      const tile = e.target.closest('.camera-pip'); if (!tile) return;
+      const b = e.target.closest('.cam-actions button');
+      if (!b) { tile.classList.toggle('show-actions'); return; }
+      const key = tile.dataset.layoutKey || '', act = b.dataset.act;
+      if (act === 'pin') { camUi.pinned = camUi.pinned === key ? '' : key; scheduleCameraQuality(); }
+      else if (act === 'mirror') camUi.mirror.set(key, !tile.classList.contains('is-mirrored'));
+      else if (act === 'hide') camUi.hidden.add(key);
+      else if (act === 'full') { if (document.fullscreenElement === tile) document.exitFullscreen(); else if (tile.requestFullscreen) tile.requestFullscreen().catch(() => {}); return; }
+      layoutCameraStage();
+    });
+    if (typeof ResizeObserver === 'function') new ResizeObserver(() => layoutCameraStage()).observe(els.cameraPips);
+  }
+  window.addEventListener('resize', () => layoutCameraStage(), {passive:true});
+  document.addEventListener('fullscreenchange', () => layoutCameraStage());
+
+  async function openCameraPreview() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { await requestCameraCapture(settings.cameraId); return; }
+    if (document.querySelector('.cam-preview-back')) return;
+    const mk = (tag, cls, text) => { const el = document.createElement(tag); if (cls) el.className = cls; if (text) el.textContent = text; return el; };
+    const back = mk('div', 'cam-preview-back'), box = mk('div', 'cam-preview mirror');
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Pré-visualização da câmera');
+    const video = mk('video'); video.autoplay = true; video.playsInline = true; video.muted = true;
+    const sel = mk('select'); sel.setAttribute('aria-label', 'Dispositivo de câmera');
+    const msg = mk('p', 'hint', 'Abrindo a câmera…');
+    const acts = mk('div', 'cam-preview-actions');
+    const mirror = mk('button', 'btn ghost', 'Espelhar'), cancel = mk('button', 'btn ghost', 'Cancelar'), ok = mk('button', 'btn primary', 'Ligar câmera');
+    for (const b of [mirror, cancel, ok]) b.type = 'button';
+    ok.disabled = true; acts.append(mirror, cancel, ok);
+    box.append(mk('h2', '', 'Como você vai aparecer'), video, sel, msg, acts); back.appendChild(box); document.body.appendChild(back);
+    let stream = null, closed = false;
+    const stop = () => { if (stream) stream.getTracks().forEach(t => { try { t.stop(); } catch (_) { /* melhor esforço */ } }); stream = null; video.srcObject = null; };
+    const onKey = e => { if (e.key === 'Escape') { e.preventDefault(); close(); } };
+    const close = () => { closed = true; stop(); back.remove(); document.removeEventListener('keydown', onKey, true); };
+    const start = async id => {
+      stop(); ok.disabled = true; msg.textContent = 'Abrindo a câmera…';
+      try {
+        const v = {width:{ideal:1280}, height:{ideal:720}}; if (id) v.deviceId = {exact:id};
+        const s = await navigator.mediaDevices.getUserMedia({video:v, audio:false});
+        if (closed) { s.getTracks().forEach(t => t.stop()); return; }
+        stream = s; video.srcObject = s; video.play().catch(() => {}); ok.disabled = false; msg.textContent = 'Confira enquadramento e luz antes de entrar no vídeo.';
+        const devs = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'videoinput' && d.deviceId);
+        const cur = (s.getVideoTracks()[0].getSettings() || {}).deviceId || '';
+        sel.replaceChildren(); devs.forEach((d, i) => sel.add(new Option(d.label || ('Câmera ' + (i + 1)), d.deviceId))); sel.value = id || cur;
+      } catch (e) { msg.textContent = 'Não foi possível abrir a câmera (' + (e && e.name || 'erro') + '). Verifique a permissão do navegador.'; }
+    };
+    sel.addEventListener('change', () => start(sel.value));
+    mirror.addEventListener('click', () => { box.classList.toggle('mirror'); camUi.mirror.set('local', box.classList.contains('mirror')); });
+    cancel.addEventListener('click', close); back.addEventListener('click', e => { if (e.target === back) close(); });
+    ok.addEventListener('click', async () => {
+      const id = sel.value || ''; close();
+      if (id && id !== settings.cameraId) { settings.cameraId = id; persistQualitySettings(); if (els.selCamera) els.selCamera.value = id; }
+      await requestCameraCapture(settings.cameraId);
+    });
+    document.addEventListener('keydown', onKey, true); ok.focus();
+    start(settings.cameraId || '');
+  }
 
   function setCameraButton() {
     if (!els.btnCamera) return;
@@ -13558,7 +13808,7 @@
     setCameraButton();
     let stream = null;
     try {
-      const video = {width:{ideal:640},height:{ideal:480},frameRate:{ideal:24,max:30}};
+      const video = {width:{ideal:1280},height:{ideal:720},aspectRatio:{ideal:16/9},frameRate:{ideal:24,max:30}};
       if (deviceId) video.deviceId = {exact:deviceId};
       stream = await navigator.mediaDevices.getUserMedia({video,audio:false});
 
@@ -13640,7 +13890,7 @@
       return;
     }
     if (state.cameraStream) { stopCamera(true); toast('Câmera desligada.'); return; }
-    await requestCameraCapture(settings.cameraId);
+    await openCameraPreview();
   }
   function stopAllCameras() {
     stopCamera(false);

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Ccircle cx=%278%27 cy=%2712%27 r=%277.5%27 fill=%27%238fa0ff%27/%3E%3Ccircle cx=%2716%27 cy=%2712%27 r=%277.5%27 fill=%27%23ffb08f%27/%3E%3C/svg%3E">
 <title>Tela a dois — BETA 1.3.3</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'wasm-unsafe-eval' blob: https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js https://cdn.jsdelivr.net/npm/simple-rnnoise-wasm@1.1.0/dist/ https://unpkg.com/simple-rnnoise-wasm@1.1.0/dist/ 'sha256-jRkF8MFtFQERbICXQDnmtwxcKXefrNfiFkeYK/eXPho='; style-src 'sha256-4UrcFDZv70NrmKksMmESR0PUL4uh8uu8fsw160vE8tc='; connect-src https://0.peerjs.com wss://0.peerjs.com https://cdn.jsdelivr.net https://unpkg.com; worker-src https://cdn.jsdelivr.net https://unpkg.com blob:; media-src blob:; img-src data: blob:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'wasm-unsafe-eval' blob: https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js https://cdn.jsdelivr.net/npm/simple-rnnoise-wasm@1.1.0/dist/ https://unpkg.com/simple-rnnoise-wasm@1.1.0/dist/ 'sha256-DpZYekgKaNH1jhJJrM/6EjzA+uQXawuXZT93PZ8y0QI='; style-src 'sha256-4UrcFDZv70NrmKksMmESR0PUL4uh8uu8fsw160vE8tc='; connect-src https://0.peerjs.com wss://0.peerjs.com https://cdn.jsdelivr.net https://unpkg.com; worker-src https://cdn.jsdelivr.net https://unpkg.com blob:; media-src blob:; img-src data: blob:; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <style>
 /*
@@ -9982,6 +9982,7 @@
   function clearQueue() { state.queue.forEach(x => { clearTimeout(x.t); closeQuiet(x.call); }); state.queue = []; }
 
   function voiceOutKey(targetPeer, voiceId) { return JSON.stringify([targetPeer, voiceId]); }
+  function cameraOutKey(targetPeer, cameraId) { return JSON.stringify([targetPeer, cameraId]); }
 
   function closeVoiceOutputsToPeer(peerId) {
     for (const [key, entry] of [...state.voiceOutCalls]) {
